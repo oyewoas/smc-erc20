@@ -1,66 +1,93 @@
-## Foundry
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+# ERC20 Token Contract
 
-Foundry consists of:
+## Overview
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+The `OurToken` contract is a simple implementation of an ERC20 token. This contract allows users to create their own custom tokens with a specified name, symbol, and initial supply. It uses OpenZeppelin's ERC20 contract to ensure a secure and standardized implementation.
 
-## Documentation
+## Contract Details
 
-https://book.getfoundry.sh/
+The `OurToken` contract inherits from OpenZeppelin's `ERC20` implementation, which means it provides all the standard features of an ERC20 token, including:
 
-## Usage
+- **Name**: "OurToken"
+- **Symbol**: "OT"
+- **Initial Supply**: The amount specified during deployment
 
-### Build
+Upon deployment, the contract automatically mints the initial supply of tokens to the address that deploys the contract.
 
-```shell
-$ forge build
+### Example Token Contract
+
+```solidity
+// SPDX-License-Identifier: MIT
+
+pragma solidity ^0.8.18;
+
+import {ERC20} from "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract OurToken is ERC20 {
+    constructor(uint256 initialSupply) ERC20("OurToken", "OT") {
+        _mint(msg.sender, initialSupply);
+    }
+}
 ```
 
-### Test
+### Functions
 
-```shell
-$ forge test
+- **constructor(uint256 initialSupply)**: Mints the initial supply to the address deploying the contract.
+
+### Usage
+
+Once deployed, users can interact with the contract by performing standard ERC20 operations, such as:
+
+- Transferring tokens between accounts
+- Checking balances of accounts
+
+## Makefile Commands
+
+This project includes a `Makefile` that simplifies common development tasks. Here are the available commands:
+
+- `make install`: Installs the required dependencies.
+- `make deploy`: Deploys the token contract to a local Ethereum network.
+- `make deploy-sepolia`: Deploys the token contract to the Sepolia network.
+- `make deploy-zk`: Deploys the token contract to the zkSync network.
+- `make test`: Runs tests to ensure the token contract works as expected.
+- `make clean`: Cleans the project by removing generated files.
+- `make format`: Formats the code.
+- `make update`: Updates the project dependencies.
+
+## Getting Started
+
+### Installation
+
+1. Clone the repository.
+2. Install the required dependencies by running:
+
+```bash
+make install
 ```
 
-### Format
+### Deploying the Token
 
-```shell
-$ forge fmt
+To deploy the token contract to a network, use:
+
+```bash
+make deploy
 ```
 
-### Gas Snapshots
+You can specify the network (e.g., Sepolia or zkSync) with the corresponding command.
 
-```shell
-$ forge snapshot
+### Running Tests
+
+Ensure the contract works as expected by running the tests:
+
+```bash
+make test
 ```
 
-### Anvil
+### Interacting with the Token
 
-```shell
-$ anvil
-```
+Once deployed, you can interact with your custom token via standard ERC20 operations like transferring tokens and checking balances.
 
-### Deploy
+## License
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+This project is licensed under the MIT License - see the LICENSE file for details.
